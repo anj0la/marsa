@@ -34,9 +34,9 @@ dependencies = [
     "numpy",
     "pandas",
     "emoji",
-    "streamlit",
     "vaderSentiment",             
     "scikit-learn",
+    "pyyaml",
 ]
 
 [project.urls]
