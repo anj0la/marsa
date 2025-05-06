@@ -1,0 +1,64 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "marsa"
+version = "1.0"
+description = "MARSA (Multiple-Aspect Rule-Based Sentiment Annotator) is a lightweight assistant for aspect-sentiment pair extraction and correction."
+authors = [
+    { name = "Anjola Aina", email = "anjola.aina@gmail.com" }
+]
+readme = "README.md"
+readme-content-type = "text/markdown"
+requires-python = ">=3.10"
+homepage = "https://github.com/anj0la/marsa"
+classifiers = [
+    "Development Status :: 3 - Alpha", 
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# Core dependencies for MARSA
+dependencies = [
+    "spacy",                    
+    "numpy",
+    "pandas",
+    "emoji",
+    "streamlit",
+    "vaderSentiment",             
+    "scikit-learn",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/anj0la/marsa"
+"Bug Tracker" = "https://github.com/anj0la/marsa/issues"
+
+# Optional dependencies (e.g., for development, testing)
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0,<9.0",       
+    "ruff>=0.1,<0.5",           
+]
+docs = [
+    "sphinx>=5.0,<8.0",          # For building documentation
+    "sphinx-rtd-theme>=1.0,<2.0",# A common Sphinx theme
+]
+
+# Entry points for command-line scripts
+[project.scripts]
+marsa-cli = "marsa.cli:main" # src/marsa/cli.py with a main() function
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+]
