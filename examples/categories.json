@@ -1,0 +1,77 @@
+[
+  {
+    "categories": {
+      "Macro & Micro Tracking": [
+        "macros",
+        "micros",
+        "macronutrient",
+        "micronutrient",
+        "vitamin",
+        "mineral"
+      ],
+      "Health & Energy Tracking": [
+        "calorie tracking",
+        "calorie counting",
+        "TDEE",
+        "caloric intake",
+        "caloric expenditure",
+        "sleep tracking",
+        "water tracking",
+        "weight tracking"
+      ],
+      "Food Logging & Database": [
+        "food logging",
+        "food diary",
+        "barcode",
+        "database"
+      ],
+      "Meal Planning & Recipes": [
+        "meal planning",
+        "meal prep",
+        "recipe builder",
+        "recipes"
+      ],
+      "Exercise & Activity": [
+        "exercise tracking",
+        "fitness tracker",
+        "step tracking",
+        "step count"
+      ],
+      "Customization & Goals": [
+        "goal setting",
+        "customization",
+        "goals",
+        "personalization",
+        "reminders",
+        "habit tracking"
+      ],
+      "Insights & Reports": [
+        "nutrition insight",
+        "nutrition strategies",
+        "nutrition breakdown",
+        "reports"
+      ],
+      "Technology & Integration": [
+        "AI",
+        "app design",
+        "user interface",
+        "UI",
+        "offline mode",
+        "Apple Health",
+        "third-party integration",
+        "syncing",
+        "activity sync",
+        "sync workout"
+      ],
+      "Engagement & Motivation": [
+        "gamification",
+        "fasting timer",
+        "challenge",
+        "achievement",
+        "badge",
+        "streak",
+        "leaderboard"
+      ]
+    }
+  }
+]
