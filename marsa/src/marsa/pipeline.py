@@ -1,4 +1,4 @@
-from config import AspectConfig, load_aspect_config
+from config import load_aspect_config
 from matching import match_aspect_phrases
 from sentiment import AspectSentimentAnalyzer
 from utils import clean_input
