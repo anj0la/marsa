@@ -1,0 +1,12 @@
+aspect_terms:
+    - camera
+    - battery
+    - screen
+
+category_to_terms:
+    hardware:
+        - camera
+        - battery
+    interface:
+        - screen
+        - keyboard

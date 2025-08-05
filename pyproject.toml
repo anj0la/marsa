@@ -54,3 +54,7 @@ docs = [
 [project.urls]
 "Homepage" = "https://github.com/anj0la/marsa"
 "Bug Tracker" = "https://github.com/anj0la/marsa/issues"
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+testpaths = ["tests"]

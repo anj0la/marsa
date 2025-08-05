@@ -1,4 +1,3 @@
-import spacy
 from spacy.matcher import PhraseMatcher
 from config import AspectConfig
 from dataclasses import dataclass

@@ -1,6 +1,6 @@
 from config import load_aspect_config
 from matching import match_aspect_phrases
-from sentiment import AspectSentimentAnalyzer
+from sentiment import AspectSentimentAnalyzer, AspectSentimentResult
 from utils import clean_input
 
 class AspectSentimentPipeline:
@@ -8,12 +8,12 @@ class AspectSentimentPipeline:
         self.config = load_aspect_config(config_file)
         self.sentiment_analyzer = AspectSentimentAnalyzer()
     
-    def process_corpus(self, comments: list[str]) -> list[dict]:
+    def process_corpus_flat(self, comments: list[str]) -> list[dict]:
         results = []
         for comment in comments:
             cleaned = clean_input(comment)
             aspects = match_aspect_phrases(cleaned, self.config)
-            aspect_sentiments = self.sentiment_analyzer.analyze_aspects(aspects, cleaned)
+            sentiment_result = self.sentiment_analyzer.analyze_text(cleaned, aspects)
             results.append({
                 'original_text': comment,
                 'cleaned_text': cleaned,
@@ -27,7 +27,16 @@ class AspectSentimentPipeline:
                         'start': aspect.aspect_match.start,
                         'end': aspect.aspect_match.end
                     }
-                    for aspect in aspect_sentiments
+                    for aspect in sentiment_result.aspects
                 ]
             })
+        return results
+    
+    def process_corpus(self, comments: list[str]) -> list[AspectSentimentResult]:
+        results = []
+        for comment in comments:
+            cleaned = clean_input(comment)
+            aspects = match_aspect_phrases(cleaned, self.config)
+            sentiment_result = self.sentiment_analyzer.analyze_text(cleaned, aspects)
+            results.append(sentiment_result)
         return results

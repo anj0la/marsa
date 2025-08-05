@@ -30,7 +30,7 @@ def analyze(args):
             
         print(f"Processing {len(comments)} comments...")
         
-        results = pipeline.process_corpus(comments)
+        results = pipeline.process_corpus_flat(comments)
         export_for_review(results, output)
         
         print(f"Analysis complete. Results saved to {output}")
