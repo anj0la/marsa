@@ -1,1 +1,0 @@
-from .src.marsa import config

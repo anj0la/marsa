@@ -25,11 +25,11 @@ def load_from_yaml(file_path: str) -> AspectConfig:
         raise FileNotFoundError(f"File not found: {path}")
 
     with path.open('r', encoding='utf-8') as fp:
-            data = list(yaml.load_all(fp, Loader=yaml.SafeLoader))[0]
-            return AspectConfig(
-                aspect_terms=data.get('aspects'),
-                category_to_terms=data.get('categories')
-            )
+        data = yaml.safe_load(fp)
+        return AspectConfig(
+            aspect_terms=data.get('aspects'),
+            category_to_terms=data.get('categories')
+        )
             
 def load_from_txt(file_path: str) -> AspectConfig:    
     path = Path(file_path).resolve()
@@ -64,16 +64,12 @@ def load_from_json(file_path: str) -> AspectConfig:
         raise FileNotFoundError(f"File not found: {path}")
 
     with path.open('r', encoding='utf-8') as fp:
-            data = json.load(fp)[0]
-            return AspectConfig(
-                aspect_terms=data.get('aspects'),
-                category_to_terms=data.get('categories')
-            )
+        data = json.load(fp)
+        return AspectConfig(
+            aspect_terms=data.get('aspects'),
+            category_to_terms=data.get('categories')
+        )
     
 def check_file_extension(file_path: str, expected_ext: list[str]) -> bool:
     path = Path(file_path)
     return any(path.suffix.lower() == ext.lower() for ext in expected_ext)
-
-
-data = load_from_yaml('examples/categories.yml')
-print(data)

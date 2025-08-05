@@ -1,5 +1,4 @@
-[
-  {
+{
     "categories": {
       "Macro & Micro Tracking": [
         "macros",
@@ -73,5 +72,5 @@
         "leaderboard"
       ]
     }
-  }
-]
+}
+
