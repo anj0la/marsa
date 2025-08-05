@@ -1,4 +1,75 @@
-categories:
+aspect_terms:
+    - macro
+    - macronutrient
+    - macros
+    - macro tracking
+    - micro
+    - micronutrient
+    - micros
+    - micro tracking
+    - vitamins
+    - minerals
+    - protein tracking
+    - carb tracking
+    - fat tracking
+    - vitamin tracking
+    - mineral tracking
+    - calorie tracking
+    - calorie counting
+    - TDEE
+    - caloric intake
+    - caloric expenditure
+    - weight tracking
+    - water tracking
+    - sleep tracking
+    - food logging
+    - food diary
+    - barcode scanner
+    - barcode
+    - scanner
+    - food database
+    - food search
+    - meal planning
+    - meal prep
+    - recipe builder
+    - recipes
+    - meal scheduling
+    - exercise tracking
+    - workout logging
+    - fitness tracker
+    - step tracking
+    - step count
+    - activity sync
+    - sync workout
+    - activity tracking
+    - user interface
+    - UI
+    - app design
+    - offline mode
+    - syncing
+    - Apple Health
+    - Google Fit
+    - third-party integration
+    - AI features
+    - goal setting
+    - customization
+    - personalization
+    - reminders
+    - gamification
+    - badges
+    - streaks
+    - challenges
+    - fasting timer
+    - leaderboards
+    - achievements
+    - habit tracking
+    - nutrition insights
+    - reports
+    - progress tracking
+    - nutrition breakdown
+    - weekly reports
+
+category_to_terms:
   Macro_Micro_Tracking:
     - macro
     - macronutrient

@@ -37,24 +37,16 @@ def analyze(args):
     
     except Exception as e:
         print(f"Error during analysis: {e}")
-
-def gui(args): # TODO: Create manual GUI command
-    print("Launching GUI...")
     
 def main():
     parser = argparse.ArgumentParser(description='Aspect-based sentiment analysis tool')
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
     
-    # Analyze command
     analyze_parser = subparsers.add_parser('analyze', help='Analyze aspects and sentiment in text data')
     analyze_parser.add_argument('input_file', help='Input file to analyze (one comment per line)')
-    analyze_parser.add_argument('-c', '--config', required=True, help='Aspect config file (.yaml / .yml, .json or .txt)')
+    analyze_parser.add_argument('-c', '--config', required=True, help='Aspect config file (.yaml / .yml or .json)')
     analyze_parser.add_argument('-o', '--output', default='results.json', help='Output file (default: results.json)')
     analyze_parser.set_defaults(func=analyze)
-    
-    # GUI command
-    gui_parser = subparsers.add_parser('gui', help='Launch manual labeling GUI')
-    gui_parser.set_defaults(func=gui)
     
     args = parser.parse_args()
     
