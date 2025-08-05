@@ -47,8 +47,8 @@ dev = [
     "ruff>=0.1,<0.5",           
 ]
 docs = [
-    "sphinx>=5.0,<8.0",          # For building documentation
-    "sphinx-rtd-theme>=1.0,<2.0",# A common Sphinx theme
+    "sphinx>=5.0,<8.0",          
+    "sphinx-rtd-theme>=1.0,<2.0",
 ]
 
 [project.urls]

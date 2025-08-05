@@ -2,6 +2,7 @@ import spacy
 from spacy.matcher import PhraseMatcher
 from config import AspectConfig
 from dataclasses import dataclass
+from utils import require_spacy_model
 
 @dataclass
 class AspectMatch:
@@ -13,7 +14,7 @@ class AspectMatch:
     category: str | None = None 
 
 def match_aspect_phrases(text: str, config: AspectConfig) -> list[AspectMatch]:
-    nlp = spacy.load("en_core_web_sm")
+    nlp = require_spacy_model("en_core_web_sm")
     matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
     
     term_to_category = {}
