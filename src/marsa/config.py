@@ -14,7 +14,7 @@ def load_aspect_config(file_path: str) -> AspectConfig:
     elif check_file_extension(file_path, ['.json']):
         return load_from_json(file_path)
     else:
-        raise NameError(f'Expected a YAML (.yaml, .yml) or JSON (.json) extension.')
+        raise NameError(f'Expected YAML (.yaml, .yml) or JSON (.json) extension.')
 
 def load_from_yaml(file_path: str) -> AspectConfig: 
     path = Path(file_path).resolve()

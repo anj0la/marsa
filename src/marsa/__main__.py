@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
-from pipeline import AspectSentimentPipeline
-from export import export_for_review
+from marsa.pipeline import AspectSentimentPipeline
+from marsa.export import export_for_review
 
 def analyze(args):
     input_file = args.input_file

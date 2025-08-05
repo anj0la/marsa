@@ -1,6 +1,6 @@
-#from marsa.config import AspectConfig
-from marsa.src.marsa.matching import AspectConfig, AspectMatch
-from marsa.src.marsa.sentiment import AspectSentiment, AspectSentimentResult
+from marsa.config import AspectConfig
+from marsa.matching import AspectMatch
+from marsa.sentiment import AspectSentiment, AspectSentimentResult
 
 EXAMPLE_CORPUS = ["I love the camera but hate the battery life"]
 
@@ -10,21 +10,21 @@ ASPECT_CONFIG = AspectConfig(
 )
 
 FIRST_ASPECT_MATCH = AspectMatch(
-    text = EXAMPLE_CORPUS[0],
-    start = 11,
-    end = 17,
-    token_start = 3,
-    token_end = 4,
-    category = "hardware"
-    )
+    text="camera",
+    start=11,
+    end=17,
+    token_start=3,
+    token_end=4,
+    category="hardware"
+)
 
 SECOND_ASPECT_MATCH = AspectMatch(
-    text = EXAMPLE_CORPUS[0],
-    start = 31,
-    end = 38,
-    token_start = 7,
-    token_end = 8,
-    category = "hardware"
+    text="battery",
+    start=31,
+    end=38,
+    token_start=7,
+    token_end=8,
+    category="hardware"
 )
 
 FIRST_ASPECT_SENTIMENT = AspectSentiment(
@@ -34,9 +34,9 @@ FIRST_ASPECT_SENTIMENT = AspectSentiment(
 )
 
 SECOND_ASPECT_SENTIMENT = AspectSentiment(
-    aspect_match=FIRST_ASPECT_MATCH,
-    sentiment = "negative",
-    confidence = 0.9
+    aspect_match=SECOND_ASPECT_MATCH, 
+    sentiment="negative",
+    confidence=0.9
 )
 
 ASPECT_SENTIMENT_RESULT = AspectSentimentResult(

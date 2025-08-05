@@ -1,7 +1,7 @@
-from config import load_aspect_config
-from matching import match_aspect_phrases
-from sentiment import AspectSentimentAnalyzer, AspectSentimentResult
-from utils import clean_input
+from marsa.config import load_aspect_config
+from marsa.matching import match_aspect_phrases
+from marsa.sentiment import AspectSentimentAnalyzer, AspectSentimentResult
+from marsa.utils import clean_input
 
 class AspectSentimentPipeline:
     def __init__(self, config_file: str):
@@ -12,8 +12,8 @@ class AspectSentimentPipeline:
         results = []
         for comment in comments:
             cleaned = clean_input(comment)
-            aspects = match_aspect_phrases(cleaned, self.config)
-            sentiment_result = self.sentiment_analyzer.analyze_text(cleaned, aspects)
+            aspects, doc = match_aspect_phrases(cleaned, self.config)
+            sentiment_result = self.sentiment_analyzer.analyze_text(cleaned, aspects, doc)
             results.append({
                 'original_text': comment,
                 'cleaned_text': cleaned,
@@ -36,7 +36,7 @@ class AspectSentimentPipeline:
         results = []
         for comment in comments:
             cleaned = clean_input(comment)
-            aspects = match_aspect_phrases(cleaned, self.config)
-            sentiment_result = self.sentiment_analyzer.analyze_text(cleaned, aspects)
+            aspects, doc = match_aspect_phrases(cleaned, self.config)
+            sentiment_result = self.sentiment_analyzer.analyze_text(cleaned, aspects, doc)
             results.append(sentiment_result)
         return results
