@@ -18,8 +18,7 @@ class AspectSentimentResult:
     aspects: list[AspectSentiment]
     
 class AspectSentimentAnalyzer:
-    def __init__(self, analyzer_type: str = "vader", threshold: float = 0.05, context_window: int = 5) -> None:
-        self.analyzer_type = analyzer_type
+    def __init__(self, threshold: float = 0.05, context_window: int = 5) -> None:
         self.threshold = threshold
         self.context_window = context_window
         self.vader_analyzer = SentimentIntensityAnalyzer()
@@ -28,28 +27,14 @@ class AspectSentimentAnalyzer:
             model="cardiffnlp/twitter-roberta-base-sentiment-latest",
             device=0 if torch.cuda.is_available() else -1
         )
-        self._setup_analyzer()
         self.doc = None
-    
-    def _setup_analyzer(self):
-        if self.analyzer_type == "vader":
-            self.analyzer = SentimentIntensityAnalyzer()
-        elif self.analyzer_text == "bert":
-            model_name = "cardiffnlp/twitter-roberta-base-sentiment-latest"
-            self.analyzer = pipeline(
-                "sentiment-analysis", 
-                model=model_name, 
-                tokenizer=model_name,
-                device=0 if torch.cuda.is_available() else -1,
-                return_all_scores=True
-            )
         
     def analyze_text(self, text: str, aspect_matches: list[AspectMatch], doc: Doc) -> AspectSentimentResult:
-        self.doc = doc
+        self.doc = doc  
         aspect_sentiments = []
         
         for aspect in aspect_matches:
-            context = self._extract_context_window(text, aspect)
+            context = self._extract_context_window(aspect)
             
             vader_scores = self.vader_analyzer.polarity_scores(context)
             vader_compound = vader_scores['compound']
@@ -72,14 +57,30 @@ class AspectSentimentAnalyzer:
         end_token = min(len(self.doc), aspect_match.token_end + self.context_window)
         return self.doc[start_token:end_token].text
     
+    def _extract_bert_probabilities(self, bert_results: dict) -> list[float]:        
+        probs = [0.0, 0.0, 0.0]  # [negative, neutral, positive]
+        
+        for result in bert_results:
+            label = result['label'].lower()
+            score = result['score']
+            
+            if 'negative' in label or label == 'label_0':
+                probs[0] = score
+            elif 'neutral' in label or label == 'label_1':
+                probs[1] = score
+            elif 'positive' in label or label == 'label_2':
+                probs[2] = score
+            
+        return probs
+    
     def _weighted_sentiment(self, bert_probs: list[float], vader_score: float) -> tuple[str, float]:
         bert_sentiment_score = (
-            -1 * bert_probs[0] +  # negative
-             0 * bert_probs[1] +  # neutral  
-             1 * bert_probs[2]    # positive
+            -1 * bert_probs[0] +        # negative
+             0 * bert_probs[1] +        # neutral  
+             1 * bert_probs[2]          # positive
         )
-        bert_confidence = max(bert_probs)  # highest probability
-        vader_confidence = abs(vader_score)  # distance from neutral
+        bert_confidence = max(bert_probs)
+        vader_confidence = abs(vader_score)
         total_confidence = bert_confidence + vader_confidence
         
         if total_confidence > 0:
@@ -99,19 +100,11 @@ class AspectSentimentAnalyzer:
             return "negative", final_confidence
         else:
             return "neutral", final_confidence
-    
-    def _extract_bert_probabilities(self, bert_results) -> list[float]:        
-        probs = [0.0, 0.0, 0.0]  # [negative, neutral, positive]
         
-        for result in bert_results:
-            label = result['label'].lower()
-            score = result['score']
-            
-            if 'negative' in label:
-                probs[0] = score
-            elif 'neutral' in label:
-                probs[1] = score
-            elif 'positive' in label:
-                probs[2] = score
-        
-        return probs
+    def _calculate_agreement(self, bert_score: float, vader_score: float) -> float:
+        if (bert_score > 0 and vader_score > 0) or (bert_score < 0 and vader_score < 0):
+            return 1.0  # Agreement
+        elif abs(bert_score) < self.threshold and abs(vader_score) < self.threshold:
+            return 1.0  # Both neutral
+        else:
+            return 0.5  # Disagreement
