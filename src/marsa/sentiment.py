@@ -75,9 +75,9 @@ class AspectSentimentAnalyzer:
     
     def _weighted_sentiment(self, bert_probs: list[float], vader_score: float) -> tuple[str, float]:
         bert_sentiment_score = (
-            -1 * bert_probs[0] +        # negative
-             0 * bert_probs[1] +        # neutral  
-             1 * bert_probs[2]          # positive
+            -1 * bert_probs[0] +   # negative
+             0 * bert_probs[1] +   # neutral  
+             1 * bert_probs[2]     # positive
         )
         bert_confidence = max(bert_probs)
         vader_confidence = abs(vader_score)
@@ -103,8 +103,8 @@ class AspectSentimentAnalyzer:
         
     def _calculate_agreement(self, bert_score: float, vader_score: float) -> float:
         if (bert_score > 0 and vader_score > 0) or (bert_score < 0 and vader_score < 0):
-            return 1.0  # Agreement
+            return 1.0  # agreement
         elif abs(bert_score) < self.threshold and abs(vader_score) < self.threshold:
-            return 1.0  # Both neutral
+            return 1.0  # both neutral
         else:
-            return 0.5  # Disagreement
+            return 0.5  # disagreement
