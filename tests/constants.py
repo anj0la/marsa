@@ -25,3 +25,34 @@ SECOND_ASPECT_MATCH = AspectMatch(
     token_end=8,
     category="hardware"
 )
+
+SAMPLE_RESULTS = [
+    {
+        'cleaned_text': 'great camera but battery life is terrible',
+        'aspect_sentiments': [
+            {
+                'aspect': 'camera',
+                'category': 'hardware',
+                'sentiment': 'positive',
+                'confidence': 0.85
+            },
+            {
+                'aspect': 'battery',
+                'category': 'hardware',
+                'sentiment': 'negative',
+                'confidence': 0.92
+            }
+        ]
+    },
+    {
+        'cleaned_text': 'beautiful screen display',
+        'aspect_sentiments': [
+            {
+                'aspect': 'screen',
+                'category': 'interface',
+                'sentiment': 'positive',
+                'confidence': 0.95
+            }
+        ]
+    }
+]

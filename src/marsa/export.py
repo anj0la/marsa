@@ -24,6 +24,6 @@ def export_for_review(results: list[dict], out_file: str):
                     'prelabeled_sentiment': aspect_sent['sentiment'],
                     'confidence': aspect_sent['confidence']
                 })
-        pd.DataFrame(flattened).to_csv(path, index=False)
+        pd.DataFrame(flattened, columns=['text', 'aspect', 'category', 'prelabeled_sentiment', 'confidence']).to_csv(path, index=False)
     else:
-        raise ValueError(f'Unsupported file extension: {path.suffix}. Expected .json or .csv')
+        raise ValueError(f'Unsupported file extension: {path.suffix}; expected .json or .csv')
