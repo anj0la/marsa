@@ -25,7 +25,8 @@ class AspectSentimentAnalyzer:
         self.bert_model = pipeline(
             "sentiment-analysis", # alias for text-classication
             model="cardiffnlp/twitter-roberta-base-sentiment-latest",
-            device=0 if torch.cuda.is_available() else -1
+            device=0 if torch.cuda.is_available() else -1,
+            top_k=True
         )
         self.doc = None
         
