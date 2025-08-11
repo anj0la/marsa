@@ -1,6 +1,6 @@
 from marsa.config import AspectConfig
 from marsa.matching import match_aspect_phrases, AspectMatch
-from tests.constants import ASPECT_CONFIG
+from tests.fixtures.constants import ASPECT_CONFIG
 
 # ---------- Regular Tests ----------
 

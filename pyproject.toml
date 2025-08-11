@@ -52,6 +52,9 @@ docs = [
     "sphinx-rtd-theme>=1.0,<2.0",
 ]
 
+[project.scripts]
+marsa = "marsa.__main__:main"
+
 [project.urls]
 "Homepage" = "https://github.com/anj0la/marsa"
 "Bug Tracker" = "https://github.com/anj0la/marsa/issues"

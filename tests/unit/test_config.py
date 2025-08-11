@@ -1,13 +1,13 @@
 import pytest
 from pathlib import Path
 from marsa.config import AspectConfig, load_aspect_config, check_file_extension
-from tests.constants import ASPECT_CONFIG
+from tests.fixtures.constants import ASPECT_CONFIG
 
 # ---------- Regular Tests ----------
 
 def test_load_yaml_aspects_only_example():
     # Arrange
-    path = 'tests/data/test_aspect_only.yaml'
+    path = 'tests/fixtures/test_aspect_only.yaml'
 
     # Act
     config = load_aspect_config(path)
@@ -25,7 +25,7 @@ def test_load_yaml_aspects_only_example():
     
 def test_load_yaml_aspects_with_categories_example():
     # Arrange
-    path = 'tests/data/test_aspect.yaml'
+    path = 'tests/fixtures/test_aspect.yaml'
 
     # Act
     config = load_aspect_config(path)
@@ -49,7 +49,7 @@ def test_load_yaml_aspects_with_categories_example():
 
 def test_load_json_aspects_only_example():
     # Arrange
-    path = 'tests/data/test_aspect_only.json'
+    path = 'tests/fixtures/test_aspect_only.json'
     
     # Act
     config = load_aspect_config(path)
@@ -67,7 +67,7 @@ def test_load_json_aspects_only_example():
     
 def test_load_json_with_categories_example():
     # Arrange
-    path = 'tests/data/test_aspect.json'
+    path = 'tests/fixtures/test_aspect.json'
     
     # Act
     config = load_aspect_config(path)
@@ -93,11 +93,11 @@ def test_load_json_with_categories_example():
 
 def test_missing_file_raises():
     with pytest.raises(FileNotFoundError):
-        load_aspect_config('tests/data/nonexistent.yaml')
+        load_aspect_config('tests/fixtures/nonexistent.yaml')
 
 def test_invalid_extension_raises():
     # Arrange
-    invalid_file = Path('tests/data/unsupported.csv')
+    invalid_file = Path('tests/fixtures/unsupported.csv')
     
     # Act
     invalid_file.write_text('dummy content')  # create a dummy CSV file temporarily

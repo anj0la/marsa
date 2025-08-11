@@ -2,7 +2,7 @@ import pytest
 import json
 import pandas as pd
 from marsa.export import export_for_review
-from constants import SAMPLE_RESULTS
+from tests.fixtures.constants import SAMPLE_RESULTS
 
 # ---------- Regular Tests ----------
 

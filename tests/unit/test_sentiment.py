@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import Mock, patch, MagicMock
 from marsa.sentiment import AspectSentimentAnalyzer, AspectSentiment, AspectSentimentResult
 from marsa.matching import AspectMatch
-from constants import EXAMPLE_CORPUS, FIRST_ASPECT_MATCH, SECOND_ASPECT_MATCH
+from tests.fixtures.constants import EXAMPLE_CORPUS, FIRST_ASPECT_MATCH, SECOND_ASPECT_MATCH
 
 # ---------- Setup and Fixtures ----------
 
