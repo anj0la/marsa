@@ -12,17 +12,17 @@ def analyze_text(args) -> int:
         return 1
     
     try:
-        pipeline = AspectSentimentPipeline(config_file=config)
+        pipeline = AspectSentimentPipeline(config_file=config, context_window=args.context_window)
         results = pipeline.process_corpus_flat([args.text])
         
         if args.output:
             export_for_review(results, args.output)
             print(f"Results saved to {args.output}")
         else:
-            # Pretty print to console
             result = results[0]
             print(f"\nText: {result['original_text']}")
             print(f"Aspects found: {result['aspects_found']}")
+            print(f"Context window: {args.context_window} tokens")
             
             if result['aspect_sentiments']:
                 print("\nAspect Analysis:")
@@ -53,9 +53,10 @@ def analyze_file(args) -> int:
         return 1
     
     print(f"Analyzing {input_file} with config {config}")
+    print(f"Using context window: {args.context_window} tokens")
     
     try:
-        pipeline = AspectSentimentPipeline(config_file=config)
+        pipeline = AspectSentimentPipeline(config_file=config, context_window=args.context_window)
         
         input_path = Path(input_file).resolve()
         with open(input_path, 'r', encoding='utf-8') as fp:
@@ -67,7 +68,6 @@ def analyze_file(args) -> int:
             
         print(f"Processing {len(comments)} comments...")
         
-        # Add simple progress indication for large files
         if len(comments) > 10:
             print("Processing", end="", flush=True)
         
@@ -78,11 +78,11 @@ def analyze_file(args) -> int:
         
         export_for_review(results, output)
         
-        # Summary stats
         total_aspects = sum(r['aspects_found'] for r in results)
         print(f"Analysis complete!")
         print(f"  - Processed: {len(comments)} comments")
         print(f"  - Found: {total_aspects} aspects total")
+        print(f"  - Context window: {args.context_window} tokens")
         print(f"  - Results saved to: {output}")
         
         return 0
@@ -93,13 +93,20 @@ def analyze_file(args) -> int:
 
 def main():
     parser = argparse.ArgumentParser(
-        description='MARSA - Aspect-based sentiment analysis tool',
+        description='MARSA - Multi-aspect sentiment analysis tool',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  marsa analyze-text "Great camera but poor battery" -c config.yaml
+  marsa analyze-text "Great camera but poor battery" -c config.yaml -w 2
   marsa analyze-file reviews.txt -c config.yaml -o results.json
-  marsa analyze-text "Love this phone!" -c config.yaml --output analysis.json
+  marsa analyze-text "Love this phone!" -c config.yaml --output analysis.json --context_window 3
+  
+Context Window:
+  The context window determines how many tokens before and after each detected aspect
+  are included for sentiment analysis.For example, in "I love the camera but really hate the battery":
+  - "camera" is at token position 4
+  - With context window 2: includes tokens "love the" (before) and "but really" (after)
+  - This gives the model more surrounding context to determine sentiment accurately
         """
     )
     
@@ -116,6 +123,8 @@ Examples:
                            help='Aspect config file (.yaml/.yml or .json)')
     text_parser.add_argument('-o', '--output', 
                            help='Output file (if not provided, prints to console)')
+    text_parser.add_argument('-w', '--context-window', type=int, default=3, metavar='N',
+                       help='Number of tokens before and after each aspect to include for sentiment analysis (default: 3)')
     text_parser.set_defaults(func=analyze_text)
     
     # Analyze file command  
@@ -129,6 +138,8 @@ Examples:
                            help='Aspect config file (.yaml/.yml or .json)')
     file_parser.add_argument('-o', '--output', default='results.json', 
                            help='Output file (default: results.json)')
+    file_parser.add_argument('-w', '--context-window', type=int, default=3, metavar='N',
+                           help='Number of tokens before and after each aspect to include for sentiment analysis (default: 3)')
     file_parser.set_defaults(func=analyze_file)
     
     args = parser.parse_args()

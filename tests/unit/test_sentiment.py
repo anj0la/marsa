@@ -1,3 +1,4 @@
+# Updated test_sentiment.py
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 from marsa.sentiment import AspectSentimentAnalyzer, AspectSentiment, AspectSentimentResult
@@ -51,7 +52,7 @@ def test_aspect_sentiment_analyzer_init():
         analyzer = AspectSentimentAnalyzer()
         
         assert analyzer.threshold == 0.05
-        assert analyzer.context_window == 5
+        assert analyzer.context_window == 3
         assert analyzer.doc is None
 
 def test_analyze_text_basic(analyzer, mock_doc):
@@ -82,8 +83,13 @@ def test_extract_context_window(analyzer, mock_doc):
     analyzer.doc = mock_doc
     analyzer.context_window = 2
     aspect_match = AspectMatch(
-        text="test", start=0, end=4, 
-        token_start=3, token_end=4, category=None
+        text="test", 
+        aspect="camera",
+        start=0, 
+        end=4, 
+        token_start=3, 
+        token_end=4, 
+        category=None
     )
     
     # Act
@@ -91,7 +97,7 @@ def test_extract_context_window(analyzer, mock_doc):
     
     # Assert
     assert isinstance(context, str)
-    assert context == "context around aspect" # should match mocked text
+    assert context == "context around aspect"
     mock_doc.__getitem__.assert_called_once()
 
 def test_extract_bert_probabilities(analyzer):
@@ -177,8 +183,13 @@ def test_extract_context_window_boundary_conditions(analyzer):
     analyzer.doc = mock_doc
     
     aspect_match = AspectMatch(
-        text="test", start=0, end=4,
-        token_start=0, token_end=1, category=None
+        text="test", 
+        aspect="camera",
+        start=0, 
+        end=4,
+        token_start=0, 
+        token_end=1, 
+        category=None
     )
     
     # Act

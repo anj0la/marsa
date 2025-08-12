@@ -6,7 +6,8 @@ from marsa.utils import require_spacy_model
 
 @dataclass
 class AspectMatch:
-    text: str
+    text: str       # actual text matches
+    aspect: str     # the aspect it represents
     start: int
     end: int   
     token_start: int
@@ -17,19 +18,18 @@ def match_aspect_phrases(text: str, config: AspectConfig) -> tuple[list[AspectMa
     nlp = require_spacy_model("en_core_web_sm")
     matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
     
-    term_to_category = {}
+    phrase_to_aspect = {}
     patterns = [] 
     
-    if config.category_to_terms:
-        all_terms = []
-        for category, terms in config.category_to_terms.items():
-            for term in terms:
-                all_terms.append(term)
-                term_to_category[term.lower()] = category
-        patterns = [nlp.make_doc(term) for term in all_terms]
-    elif config.aspect_terms:
-        patterns = [nlp.make_doc(term) for term in config.aspect_terms]
-        term_to_category = {term.lower(): None for term in config.aspect_terms}
+    for aspect_name, aspect_data in config.aspects.items():
+        if aspect_data.phrases:
+            for phrase in aspect_data.phrases:
+                patterns.append(nlp.make_doc(phrase))
+                phrase_to_aspect[phrase.lower()] = aspect_name
+        else:
+            # If no phrases defined, use aspect name itself as the phrase
+            patterns.append(nlp.make_doc(aspect_name))
+            phrase_to_aspect[aspect_name.lower()] = aspect_name
     
     if patterns:
         matcher.add('AspectTermsList', patterns)
@@ -40,15 +40,17 @@ def match_aspect_phrases(text: str, config: AspectConfig) -> tuple[list[AspectMa
     aspects = []
     for _, start, end in matches:
         span = doc[start:end]
-        category = term_to_category.get(span.text.lower(), None)
+        aspect_name = phrase_to_aspect[span.text.lower()]
+        aspect_data = config.aspects[aspect_name]
 
         aspects.append(AspectMatch(
             text=span.text, 
+            aspect=aspect_name,
             start=span.start_char, 
             end=span.end_char,     
             token_start=start,      
             token_end=end,       
-            category=category
+            category=aspect_data.category
         ))
     
     return aspects, doc

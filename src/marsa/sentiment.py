@@ -2,6 +2,7 @@ import torch
 from marsa.matching import AspectMatch
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from dataclasses import dataclass
+from transformers import logging
 from transformers import pipeline
 from spacy.tokens import Doc
 
@@ -18,10 +19,11 @@ class AspectSentimentResult:
     aspects: list[AspectSentiment]
     
 class AspectSentimentAnalyzer:
-    def __init__(self, threshold: float = 0.05, context_window: int = 5) -> None:
+    def __init__(self, threshold: float = 0.05, context_window: int = 3) -> None:
         self.threshold = threshold
         self.context_window = context_window
         self.vader_analyzer = SentimentIntensityAnalyzer()
+        logging.set_verbosity_error() # only log errors
         self.bert_model = pipeline(
             "sentiment-analysis", # alias for text-classication
             model="cardiffnlp/twitter-roberta-base-sentiment-latest",

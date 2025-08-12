@@ -1,12 +1,12 @@
-from marsa.config import load_aspect_config
+from marsa.config import create_aspect_config
 from marsa.matching import match_aspect_phrases
 from marsa.sentiment import AspectSentimentAnalyzer, AspectSentimentResult
 from marsa.utils import clean_input
 
 class AspectSentimentPipeline:
-    def __init__(self, config_file: str):
-        self.config = load_aspect_config(config_file)
-        self.sentiment_analyzer = AspectSentimentAnalyzer()
+    def __init__(self, config_file: str, context_window: int = 3):
+        self.config = create_aspect_config(config_file)
+        self.sentiment_analyzer = AspectSentimentAnalyzer(context_window=context_window)
     
     def process_corpus_flat(self, comments: list[str]) -> list[dict]:
         results = []

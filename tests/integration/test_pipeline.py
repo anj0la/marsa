@@ -6,7 +6,7 @@ from marsa.sentiment import AspectSentimentResult
 class TestAspectSentimentPipelineIntegration:    
     @pytest.fixture(scope="class")
     def real_pipeline(self):
-        config_path = "tests/fixtures/test_aspect.yaml"
+        config_path = "tests/fixtures/config.yaml"
         return AspectSentimentPipeline(config_path)
     
     @pytest.fixture

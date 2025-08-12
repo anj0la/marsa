@@ -1,4 +1,4 @@
-from marsa.config import AspectConfig
+from marsa.config import AspectConfig, AspectData
 from marsa.matching import match_aspect_phrases, AspectMatch
 from tests.fixtures.constants import ASPECT_CONFIG
 
@@ -16,8 +16,9 @@ def test_match_aspect_phrases_basic():
     assert all(isinstance(aspect, AspectMatch) for aspect in aspects)
     
     # Check first match (camera)
-    camera_match = aspects[0]
+    camera_match = next(a for a in aspects if a.text == "camera")
     assert camera_match.text == "camera"
+    assert camera_match.aspect == "camera"
     assert camera_match.start == 11
     assert camera_match.end == 17
     assert camera_match.token_start == 3
@@ -25,8 +26,9 @@ def test_match_aspect_phrases_basic():
     assert camera_match.category == "hardware"
     
     # Check second match (battery)
-    battery_match = aspects[1]
+    battery_match = next(a for a in aspects if a.text == "battery")
     assert battery_match.text == "battery"
+    assert battery_match.aspect == "battery"
     assert battery_match.start == 31
     assert battery_match.end == 38
     assert battery_match.token_start == 7
@@ -68,6 +70,7 @@ def test_match_aspect_phrases_multiple_same_term():
     # Assert
     assert len(aspects) == 2
     assert all(aspect.text == "camera" for aspect in aspects)
+    assert all(aspect.aspect == "camera" for aspect in aspects)
     assert all(aspect.category == "hardware" for aspect in aspects)
     assert aspects[0].start != aspects[1].start
     assert aspects[0].end != aspects[1].end
@@ -77,7 +80,7 @@ def test_match_aspect_phrases_case_insensitive():
     text = "I love the CAMERA but hate the Battery life"
     
     # Act
-    aspects, doc = match_aspect_phrases(text, ASPECT_CONFIG)
+    aspects, _ = match_aspect_phrases(text, ASPECT_CONFIG)
     
     # Assert
     assert len(aspects) == 2
@@ -85,13 +88,20 @@ def test_match_aspect_phrases_case_insensitive():
     camera_match = next(aspect for aspect in aspects if aspect.text.lower() == "camera")
     battery_match = next(aspect for aspect in aspects if aspect.text.lower() == "battery")
     
+    assert camera_match.aspect == "camera"
+    assert battery_match.aspect == "battery"
     assert camera_match.category == "hardware"
     assert battery_match.category == "hardware"
 
-def test_match_aspect_phrases_aspect_terms_only():
+def test_match_aspect_phrases_no_phrases_uses_aspect_names():
     # Arrange
-    from marsa.config import AspectConfig
-    config = AspectConfig(aspect_terms=["camera", "battery", "screen"])
+    config = AspectConfig(
+        aspects={
+            'camera': AspectData(category="hardware"),
+            'battery': AspectData(category="hardware"),
+            'screen': AspectData(category="interface")
+        }
+    )
     text = "The camera and screen are great"
     
     # Act
@@ -99,11 +109,54 @@ def test_match_aspect_phrases_aspect_terms_only():
     
     # Assert
     assert len(aspects) == 2
-    assert all(aspect.category is None for aspect in aspects)
+    assert all(aspect.category is not None for aspect in aspects)
+    
+    for aspect in aspects:
+        assert aspect.text == aspect.aspect
     
     terms_found = [aspect.text for aspect in aspects]
+    aspects_found = [aspect.aspect for aspect in aspects]
     assert "camera" in terms_found
     assert "screen" in terms_found
+    assert "camera" in aspects_found
+    assert "screen" in aspects_found
+
+def test_match_aspect_phrases_mixed_phrases_and_names():
+    # Arrange
+    config = AspectConfig(
+        aspects={
+            'camera': AspectData(
+                phrases=["camera", "photo", "picture"],
+                category="hardware"
+            ),
+            'battery': AspectData(category="hardware"),
+            'screen': AspectData(
+                phrases=["display", "monitor"],
+                category="interface"
+            )
+        }
+    )
+    text = "The photo quality is good, battery lasts long, and display is bright"
+    
+    # Act
+    aspects, _ = match_aspect_phrases(text, config)
+    
+    # Assert
+    assert len(aspects) == 3
+    
+    matched_texts = [aspect.text for aspect in aspects]
+    
+    assert "photo" in matched_texts
+    assert "battery" in matched_texts
+    assert "display" in matched_texts
+    
+    photo_match = next(a for a in aspects if a.text == "photo")
+    battery_match = next(a for a in aspects if a.text == "battery") 
+    display_match = next(a for a in aspects if a.text == "display")
+    
+    assert photo_match.aspect == "camera"
+    assert battery_match.aspect == "battery" 
+    assert display_match.aspect == "screen"
 
 # ---------- Edge Cases ----------
 
@@ -132,7 +185,7 @@ def test_match_aspect_phrases_whitespace_only():
 
 def test_match_aspect_phrases_punctuation_handling():
     # Arrange
-    text = "The camera, battery, and screen work well!"
+    text = "The camera, battery, and display work well!"
     
     # Act
     aspects, _ = match_aspect_phrases(text, ASPECT_CONFIG)
@@ -142,7 +195,7 @@ def test_match_aspect_phrases_punctuation_handling():
     terms_found = [aspect.text for aspect in aspects]
     assert "camera" in terms_found
     assert "battery" in terms_found  
-    assert "screen" in terms_found
+    assert "display" in terms_found
 
 def test_match_aspect_phrases_partial_word_no_match():
     # Arrange
@@ -156,7 +209,7 @@ def test_match_aspect_phrases_partial_word_no_match():
 
 def test_match_aspect_phrases_empty_config():
     # Arrange
-    config = AspectConfig(aspect_terms=[], category_to_terms={})
+    config = AspectConfig(aspects={})
     text = "The camera and battery are good"
     
     # Act
