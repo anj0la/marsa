@@ -28,6 +28,8 @@ classifiers = [
     "Topic :: Text Processing :: Linguistic",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
 
 # Core dependencies for MARSA
 dependencies = [
@@ -46,10 +48,6 @@ dependencies = [
 dev = [
     "pytest>=7.0,<9.0",       
     "ruff>=0.1,<0.5",           
-]
-docs = [
-    "sphinx>=5.0,<8.0",          
-    "sphinx-rtd-theme>=1.0,<2.0",
 ]
 
 [project.scripts]

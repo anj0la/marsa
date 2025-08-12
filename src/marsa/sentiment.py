@@ -41,6 +41,23 @@ class AspectSentimentResult:
     aspects: list[AspectSentiment]
     
 class AspectSentimentAnalyzer:
+    """
+    Ensemble sentiment analyzer combining VADER and BERT models.
+    
+    Performs aspect-based sentiment analysis using both lexicon-based (VADER)
+    and transformer-based (BERT) approaches, with weighted combination and
+    contextual analysis around detected aspects.
+    
+    The analyzer extracts context windows around aspects and uses ensemble
+    prediction to provide robust sentiment classification with confidence scoring.
+    
+    Attributes:
+        threshold (float): Sentiment score threshold for neutral classification
+        context_window (int): Number of tokens before/after aspects for context
+        vader_analyzer (SentimentIntensityAnalyzer): VADER sentiment analyzer instance
+        bert_model: Pre-trained BERT sentiment classification pipeline
+        doc (Doc | None): Current spaCy document being processed
+    """
     def __init__(self, threshold: float = 0.05, context_window: int = 3) -> None:
         """
         Initialize the aspect sentiment analyzer with VADER and BERT models.
