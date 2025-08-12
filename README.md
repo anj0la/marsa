@@ -43,33 +43,38 @@ results = pipeline.process_corpus(["I love the camera but hate the battery life"
 
 ## Configuration
 
-The easiest way to configure MARSA is by using a YAML file. Create an `aspect.yaml` fine and define your aspects:
+The easiest way to configure MARSA is by using a YAML file. Create a `config.yaml` fine and define your aspects:
 ```yaml
-aspect_terms:
-  - camera
-  - battery
-  - screen
-
-category_to_terms:
-  hardware:
-    - camera
-    - battery
-  interface:
-    - screen
-    - keyboard
+aspects:
+    camera:
+        phrases: ["camera", "photo", "picture", "pics", "photography", "image", "snap"]
+        category: "hardware"
+    
+    battery:
+        phrases: ["battery", "power", "charge", "charging", "juice", "drain", "life"]
+        category: "hardware"
+    
+    screen:
+        phrases: ["screen", "display", "resolution", "brightness", "monitor", "lcd", "oled"]
+        category: "interface"
 ```
 
-You can define aspects by creating an `aspects.json` file as well:
+You can define aspects by creating a `config.json` file as well:
 ```json
 {
-   "aspect_terms": [
-        "camera", 
-        "battery", 
-        "screen"
-   ],
-   "category_to_terms": {
-        "hardware": ["camera", "battery"],
-        "interface": ["screen"]
-   }
+  "aspects": {
+        "camera": {
+            "phrases": ["camera", "photo", "picture", "pics", "photography", "image", "snap"],
+            "category": "hardware"
+        },
+        "battery": {
+            "phrases": ["battery", "power", "charge", "charging", "juice", "drain", "life"],
+            "category": "hardware"
+        },
+        "screen": {
+            "phrases": ["screen", "display", "resolution", "brightness", "monitor", "lcd", "oled"],
+            "category": "interface"
+        }
+    }
 }
 ```
