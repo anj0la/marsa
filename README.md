@@ -29,16 +29,19 @@ uv add marsa
 
 ### Command Line
 ```bash
-# Analyze a file of comments (one per line)
-marsa analyze comments.txt --config aspects.yaml --output results.json
+# Analyze a single text string
+marsa analyze-text "Great camera but poor battery" --config config.yaml --output results.json --context-window 3
+
+# Analyze a file of comments (short notation)
+marsa analyze-file comments.txt -c config.yaml -o results.json -w 3
 ```
 
 ### Python API
 ```python
 from marsa import AspectSentimentPipeline
 
-pipeline = AspectSentimentPipeline("aspects.yaml")
-results = pipeline.process_corpus(["I love the camera but hate the battery life"])
+pipeline = AspectSentimentPipeline(config_file="config.yaml", context_window=2)
+results = pipeline.process_corpus(["I love the camera but don't like the battery life"])
 ```
 
 ## Configuration
