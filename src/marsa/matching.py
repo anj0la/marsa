@@ -6,6 +6,21 @@ from marsa.utils import require_spacy_model
 
 @dataclass
 class AspectMatch:
+    """
+    Represents a matched aspect found in text with position information.
+    
+    Contains both character-level and token-level position data for extracting
+    context windows and performing sentiment analysis on detected aspects.
+    
+    Attributes:
+        text (str): The actual matched text from the input
+        aspect (str): The aspect name this match represents
+        start (int): Character-level start position in the original text
+        end (int): Character-level end position in the original text
+        token_start (int): Token-level start position for context extraction
+        token_end (int): Token-level end position for context extraction
+        category (str | None): Optional category of the aspect (e.g., 'hardware', 'service')
+    """
     text: str       # actual text matches
     aspect: str     # the aspect it represents
     start: int
@@ -15,6 +30,24 @@ class AspectMatch:
     category: str | None = None 
 
 def match_aspect_phrases(text: str, config: AspectConfig) -> tuple[list[AspectMatch], Doc]:
+    """
+    Match aspect phrases in text using spaCy's PhraseMatcher.
+    
+    Identifies aspects and their associated phrases within the input text based on
+    the provided configuration. If no phrases are defined for an aspect, uses the
+    aspect name itself as the matching phrase.
+    
+    Args:
+        text (str): Input text to search for aspect matches
+        config (AspectConfig): Configuration containing aspects and their phrases
+        
+    Returns:
+        tuple[list[AspectMatch], Doc]]: List of matched aspects with positions and 
+                                     the spaCy Doc object for context extraction
+        
+    Raises:
+        OSError: If required spaCy model cannot be loaded
+    """
     nlp = require_spacy_model("en_core_web_sm")
     matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
     

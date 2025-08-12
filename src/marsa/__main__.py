@@ -5,6 +5,22 @@ from marsa.pipeline import AspectSentimentPipeline
 from marsa.export import export_for_review
 
 def analyze_text(args) -> int:
+    """
+    Analyze a single text string for aspects and sentiment.
+    
+    Args:
+        args: Parsed command line arguments containing:
+            - text (str): The text to analyze
+            - config (str): Path to aspect configuration file
+            - context_window (int): Number of tokens before/after aspects for context
+            - output (str, optional): Output file path for results
+    
+    Returns:
+        int: Exit code (0 for success, 1 for error)
+        
+    Raises:
+        Exception: If analysis fails due to configuration or processing errors
+    """
     config = args.config
     if not Path(config).resolve().exists():
         print(f"Error: Config file '{config}' does not exist")
@@ -39,6 +55,25 @@ def analyze_text(args) -> int:
         return 1
 
 def analyze_file(args) -> int:
+    """
+    Analyze multiple text comments from a file for aspects and sentiment.
+    
+    Processes a file containing one comment per line and performs aspect-based
+    sentiment analysis on each comment using the specified configuration.
+    
+    Args:
+        args: Parsed command line arguments containing:
+            - input_file (str): Path to input file (one comment per line)
+            - config (str): Path to aspect configuration file
+            - context_window (int): Number of tokens before/after aspects for context
+            - output (str): Output file path for results
+    
+    Returns:
+        int: Exit code (0 for success, 1 for error)
+        
+    Raises:
+        Exception: If file processing or analysis fails
+    """
     input_file = args.input_file
     input_path = Path(input_file).resolve()
     config = args.config
@@ -91,6 +126,13 @@ def analyze_file(args) -> int:
         return 1
 
 def main():
+    """
+    Main entry point for the MARSA command-line interface.
+    
+    Sets up argument parsing for analyze-text and analyze-file commands,
+    configures help text and examples, and executes the appropriate
+    analysis function based on user input.
+    """
     parser = argparse.ArgumentParser(
         description='MARSA - Multi-aspect sentiment analysis tool',
         formatter_class=argparse.RawDescriptionHelpFormatter,

@@ -6,7 +6,21 @@ from pathlib import Path
 import json
 import pandas as pd
 
-def export_for_review(results: list[dict], out_file: str):
+def export_for_review(results: list[dict], out_file: str) -> None:
+    """
+    Export sentiment analysis results to JSON or CSV format.
+    
+    Exports the analysis results to either JSON format (preserving full structure)
+    or CSV format (flattened with one row per aspect-sentiment pair).
+    
+    Args:
+        results (list[dict]): List of analysis results containing aspects and sentiments
+        out_file (str): Output file path with .json or .csv extension
+        
+    Raises:
+        ValueError: If file extension isn't .json or .csv
+        OSError: If file cannot be written to the specified path
+    """
     path = Path(out_file).resolve() 
     path.parent.mkdir(parents=True, exist_ok=True)
     
