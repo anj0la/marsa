@@ -6,8 +6,7 @@ from marsa.export import export_for_review
 
 def analyze_text(args) -> int:
     config = args.config
-    
-    if config and not Path(config).exists():
+    if not Path(config).resolve().exists():
         print(f"Error: Config file '{config}' does not exist")
         return 1
     
@@ -41,14 +40,15 @@ def analyze_text(args) -> int:
 
 def analyze_file(args) -> int:
     input_file = args.input_file
+    input_path = Path(input_file).resolve()
     config = args.config
     output = args.output
-    
-    if not Path(input_file).exists():
+
+    if not input_path.exists():
         print(f"Error: Input file '{input_file}' does not exist")
         return 1
         
-    if config and not Path(config).exists():
+    if not Path(config).resolve().exists():
         print(f"Error: Config file '{config}' does not exist")
         return 1
     
@@ -58,7 +58,6 @@ def analyze_file(args) -> int:
     try:
         pipeline = AspectSentimentPipeline(config_file=config, context_window=args.context_window)
         
-        input_path = Path(input_file).resolve()
         with open(input_path, 'r', encoding='utf-8') as fp:
             comments = [line.strip() for line in fp if line.strip()]
         
@@ -103,7 +102,7 @@ Examples:
   
 Context Window:
   The context window determines how many tokens before and after each detected aspect
-  are included for sentiment analysis.For example, in "I love the camera but really hate the battery":
+  are included for sentiment analysis. For example, in "I love the camera but really hate the battery":
   - "camera" is at token position 4
   - With context window 2: includes tokens "love the" (before) and "but really" (after)
   - This gives the model more surrounding context to determine sentiment accurately
