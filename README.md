@@ -1,12 +1,12 @@
 # MARSA
 MARSA is a lightweight tool designed to streamline aspect-based sentiment analysis (ABSA) by automating the extraction and pre-labeling of aspect-sentiment pairs from review-style text. MARSA combines rule-based aspect extraction with sentiment analysis to accelerate the long process of manually labeling text data. It is especially useful for analyzing social media content such as Reddit comments and Twitter posts and mining product reviews from platforms like Amazon and Yelp.
 
-The tool simplifies ABSA by identifying multiple aspects within a single sentence and automatically assigning initial sentiment scores using VADER. Users can define custom aspect terms and categories to tailor the analysis to their needs. MARSA also supports exporting results in JSON or CSV formats for easy manual review or use in training models. It can be accessed via command line or Python API, offering convenient ways to interact with it.
+The tool simplifies ABSA by identifying multiple aspects within a single sentence and automatically assigning initial sentiment scores using an ensemble approach combining VADER and BERT models. Users can define custom aspect terms and categories to tailor the analysis to their needs. MARSA also supports exporting results in JSON or CSV formats for easy manual review or use in training models. It can be accessed via command line or Python API, offering convenient ways to interact with it.
 
 ## Pipeline Architecture
 MARSA uses a two-stage pipeline:
 1. **Aspect Extraction**: Rule-based matching using configurable phrase dictionaries
-2. **Sentiment Analysis**: VADER sentiment analyzer processes text within the specified context window around each detected aspect
+2. **Sentiment Analysis**: Ensemble sentiment analyzer processes text within the specified context window around each detected aspect
 
 ## Installation
 ### Install with pip
