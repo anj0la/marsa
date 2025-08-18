@@ -1,4 +1,3 @@
-# Updated test_sentiment.py
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 from marsa.sentiment import AspectSentimentAnalyzer, AspectSentiment, AspectSentimentResult
