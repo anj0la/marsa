@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "marsapy"
-version = "0.1.4"
+version = "0.1.0"
 description = "MARSA (Multiple-Aspect Rule-Based Sentiment Annotator) is a lightweight assistant for aspect-sentiment pair extraction and correction."
 authors = [
     { name = "Anjola Aina", email = "anjola.aina@gmail.com" }
