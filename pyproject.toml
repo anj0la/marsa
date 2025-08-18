@@ -3,8 +3,8 @@ requires = ["hatchling >= 1.26"]
 build-backend = "hatchling.build"
 
 [project]
-name = "marsa"
-version = "0.1.0"
+name = "marsapy"
+version = "0.1.4"
 description = "MARSA (Multiple-Aspect Rule-Based Sentiment Annotator) is a lightweight assistant for aspect-sentiment pair extraction and correction."
 authors = [
     { name = "Anjola Aina", email = "anjola.aina@gmail.com" }
@@ -40,14 +40,11 @@ dependencies = [
     "pyyaml>=5.4",
     "scikit-learn>=0.24",
     "spacy>=3.0",
+    "torch>=2.5.1",
+    "torchaudio>=2.5.1",
+    "torchvision>=0.20.1",
     "transformers>=4.46.3",
     "vadersentiment>=3.3.2",
-]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.0,<9.0",       
-    "ruff>=0.1,<0.5",           
 ]
 
 [project.scripts]
@@ -57,10 +54,19 @@ marsa = "marsa.__main__:main"
 "Homepage" = "https://github.com/anj0la/marsa"
 "Bug Tracker" = "https://github.com/anj0la/marsa/issues"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/marsa"]
+
 [tool.pytest.ini_options]
 pythonpath = "src"
 testpaths = ["tests"]
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "serial",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0,<9.0",
+    "twine>=6.1.0",
 ]

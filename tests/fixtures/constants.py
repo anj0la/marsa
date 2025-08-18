@@ -40,6 +40,7 @@ SECOND_ASPECT_MATCH = AspectMatch(
     category="hardware"
 
 )
+
 SAMPLE_RESULTS = [
     {
         'cleaned_text': 'great camera but battery life is terrible',
